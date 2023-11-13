@@ -43,7 +43,13 @@ namespace CodeBase.ChunkSystem
         {
             var playerPos = _player.GetPlayerPosOnChunk();
             var distanceToChunkEdge = 0.50f - _chunkEdgeOffset;
+            
+            SetChunkDiagonally(playerPos, distanceToChunkEdge);
+            SetChunk(playerPos, distanceToChunkEdge);
+        }
 
+        private void SetChunk(Vector3 playerPos, float distanceToChunkEdge)
+        {
             var playerChunkForward = _player.CurrentChunk.transform.forward;
             var playerChunkRight = _player.CurrentChunk.transform.right;
             
@@ -66,6 +72,28 @@ namespace CodeBase.ChunkSystem
             {
                 SetChunkOnDirection(playerChunkRight, -_prefabXScale);
             }
+        }
+        private void SetChunkDiagonally(Vector3 playerPos, float distanceToChunkEdge)
+        {
+            if (playerPos.z >= distanceToChunkEdge && playerPos.x <= -distanceToChunkEdge)
+            {
+                SetChunkOnDirection(new Vector3(-1, 0, 1), _prefabZScale);
+            }
+            
+            if (playerPos.z >= distanceToChunkEdge && playerPos.x >= distanceToChunkEdge)
+            {
+                SetChunkOnDirection(new Vector3(1, 0, 1), _prefabZScale);
+            }
+
+            if (playerPos.z <= -distanceToChunkEdge && playerPos.x <= -distanceToChunkEdge)
+            {
+                SetChunkOnDirection(new Vector3(-1, 0, -1), _prefabZScale);
+            }
+
+            if (playerPos.z <= -distanceToChunkEdge && playerPos.x >= distanceToChunkEdge)
+            {
+                SetChunkOnDirection(new Vector3(1, 0, -1), _prefabZScale);
+            } 
         }
     }
 }
