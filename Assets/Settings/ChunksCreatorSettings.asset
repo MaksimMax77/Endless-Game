@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e7e509e3f97e7114e973b67ec1fbef7f, type: 3}
-  m_Name: ChunksManagerSettings
+  m_Name: ChunksCreatorSettings
   m_EditorClassIdentifier: 
   chunkPrefab: {fileID: -5760151573869529862, guid: c3bc176114c751f479252289f19fa055, type: 3}
   _chunksAmount: 5

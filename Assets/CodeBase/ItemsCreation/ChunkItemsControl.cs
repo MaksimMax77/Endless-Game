@@ -4,25 +4,28 @@ using CodeBase.ChunkSystem;
 using CodeBase.ObjectsCreation;
 using CodeBase.Settings;
 using UnityEngine;
+using Zenject;
 
 namespace CodeBase.ItemsCreation
 {
     public class ChunkItemsControl
     {
-        private readonly GameObject[] _itemsPrefabs;
-        private readonly int _amountItemsOnChunk;
-        private readonly int _itemsAmountOnStart;
+        [Inject] private readonly GameObjectsControl _gameObjectsControl;
+        [Inject] private ChunkItemsControlSettings _chunkItemsControlSettings;
         private readonly Dictionary<GameObject, List<GameObject>> _disabledObjects = new();
         private readonly Dictionary<Vector3, List<ItemContainer>> _itemsContainers = new();
-        private readonly GameObjectsControl _gameObjectsControl;
+        
+        private GameObject[] _itemsPrefabs;
+        private int _amountItemsOnChunk;
+        private int _itemsAmountOnStart;
 
-        public ChunkItemsControl(ChunkItemsControlSettings chunkItemsControlSettings, GameObjectsControl gameObjectsControl)
+        [Inject]
+        public void Init()
         {
-            _itemsPrefabs = chunkItemsControlSettings.ItemsPrefabs;
-            _amountItemsOnChunk = chunkItemsControlSettings.AmountItemsOnChunk;
-            _itemsAmountOnStart = chunkItemsControlSettings.ItemsAmountOnStart;
-            _gameObjectsControl = gameObjectsControl;
-            
+            _itemsPrefabs = _chunkItemsControlSettings.ItemsPrefabs;
+            _amountItemsOnChunk = _chunkItemsControlSettings.AmountItemsOnChunk;
+            _itemsAmountOnStart = _chunkItemsControlSettings.ItemsAmountOnStart;
+
             InstallDictionaries();
             PrepareItems();
         }

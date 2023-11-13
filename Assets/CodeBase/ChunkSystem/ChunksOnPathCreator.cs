@@ -2,30 +2,32 @@ using CodeBase.GameLoop;
 using CodeBase.PlayerCode;
 using CodeBase.Settings;
 using UnityEngine;
+using Zenject;
 
 namespace CodeBase.ChunkSystem
 {
     public class ChunksOnPathCreator: UpdateObject
     {
+        [Inject] private ChunksCreator _chunksCreator;
+        [Inject] private Player _player;
+        [Inject] private ChunksOnPathCreatorSettings _chunksOnPathCreatorSettings;
         private float _chunkEdgeOffset;
         private float _prefabXScale;
         private float _prefabZScale;
-        private ChunksManager _chunksManager;
-        private Player _player;
-
-        public ChunksOnPathCreator(Player player, ChunksOnPathCreatorSettings chunksOnPathCreatorSettings, ChunksManager chunksManager,
-            GlobalUpdate globalUpdate) : base(globalUpdate)
+        
+        public ChunksOnPathCreator(GlobalUpdate globalUpdate) : base(globalUpdate)
         {
-            _player = player;
-            
-            _chunkEdgeOffset = chunksOnPathCreatorSettings.ChunkEdgeOffset;
-            _prefabXScale = chunksOnPathCreatorSettings.PrefabXScale;
-            _prefabZScale = chunksOnPathCreatorSettings.PrefabZScale;
-
-            _chunksManager = chunksManager;
-            _chunksManager.PutChunkAndItems(Vector3.zero);
         }
 
+        [Inject]
+        public void Init()
+        {
+            _chunkEdgeOffset = _chunksOnPathCreatorSettings.ChunkEdgeOffset;
+            _prefabXScale = _chunksOnPathCreatorSettings.PrefabXScale;
+            _prefabZScale = _chunksOnPathCreatorSettings.PrefabZScale;
+            _chunksCreator.PutChunkAndItems(Vector3.zero);
+        }
+        
         public override void Update()
         {
             CreateChunkOnPlayerPath();
@@ -34,9 +36,9 @@ namespace CodeBase.ChunkSystem
         private void SetChunkOnDirection(Vector3 direction, float chunkScale)
         {
             var pos = _player.CurrentChunk.transform.position + direction * chunkScale;
-            _chunksManager.PutChunkAndItems(pos);
+            _chunksCreator.PutChunkAndItems(pos);
         }
-        
+
         private void CreateChunkOnPlayerPath()
         {
             var playerPos = _player.GetPlayerPosOnChunk();

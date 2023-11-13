@@ -4,29 +4,26 @@ using CodeBase.Cameras;
 using CodeBase.ChunkSystem;
 using CodeBase.UserInput;
 using UnityEngine;
+using Zenject;
 
 namespace CodeBase.PlayerCode
 {
     public class Player : IDisposable
     {
-        private PlayerInput _playerInput;
-        private PlayerGameObject _playerGameObject;
+        [Inject] private PlayerInput _playerInput;
+        [Inject] private PlayerGameObject _playerGameObject;
         private UnitRotation _unitRotation;
         private AnimationsControl _animationsControl;
         private Camera _camera;
    
         public Chunk CurrentChunk { get; private set; }
         
-        private Player(PlayerInput playerInput, 
-            PlayerGameObject playerGameObject, UnitCamera unitCamera)
+        [Inject]
+        public void Init(UnitCamera unitCamera)
         {
-            _playerInput = playerInput;
-            _playerGameObject = playerGameObject;
             _camera = unitCamera.Camera;
-            _animationsControl = playerGameObject.GetComponent<AnimationsControl>();
-
+            _animationsControl = _playerGameObject.GetComponent<AnimationsControl>();
             _unitRotation = new UnitRotation(_playerGameObject.transform);
-             
             
             _playerGameObject.EnterOnChunk += OnEnterOnChunk;
             _playerInput.MoveInput += OnMoveInput;
@@ -50,6 +47,12 @@ namespace CodeBase.PlayerCode
 
         private void OnMoveInput(Vector3 inputDirection)
         {
+            /*if (_animationsControl == null)//TODO убрать 
+            {
+                _playerGameObject.transform.position += inputDirection * 10 * Time.deltaTime; 
+                return;
+            }*/
+            
             _animationsControl.AnimateMove(inputDirection.x, inputDirection.z);
             _unitRotation.RotationToMoveDirection(inputDirection.x, inputDirection.z, _camera);
         }

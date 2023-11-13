@@ -14,7 +14,7 @@ namespace CodeBase.GameInstallers
     public class GameInstaller : MonoInstaller
     {
         [SerializeField] private ChunkItemsControlSettings _chunkItemsControlSettings;
-        [SerializeField] private ChunksManagerSettings _chunksManagerSettings;
+        [SerializeField] private ChunksCreatorSettings chunksCreatorSettings;
         [SerializeField] private ChunksOnPathCreatorSettings _chunksOnPathCreatorSettings;
 
         [SerializeField] private PlayerGameObject _playerGameObject;
@@ -41,14 +41,14 @@ namespace CodeBase.GameInstallers
         private void InstallChunksObjects()
         {
             Container.Bind<ChunkItemsControl>().AsSingle().NonLazy();
-            Container.Bind<ChunksManager>().AsSingle().NonLazy();
-            Container.Bind<ChunksOnPathCreator>().AsSingle().NonLazy();
+            Container.Bind<ChunksCreator>().AsSingle().NonLazy();
+            Container.BindInterfacesAndSelfTo<ChunksOnPathCreator>().AsSingle().NonLazy();
         }
         
         private void InstallSettings()
         {
             Container.BindInstance(_chunkItemsControlSettings).AsSingle().NonLazy();
-            Container.BindInstance(_chunksManagerSettings).AsSingle().NonLazy();
+            Container.BindInstance(chunksCreatorSettings).AsSingle().NonLazy();
             Container.BindInstance(_chunksOnPathCreatorSettings).AsSingle().NonLazy();
         }
 

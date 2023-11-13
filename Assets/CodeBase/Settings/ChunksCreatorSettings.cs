@@ -4,7 +4,7 @@ using UnityEngine;
 namespace CodeBase.Settings
 {
     [CreateAssetMenu(menuName = "ChunksManagerSettings", fileName = "ChunksManagerSettings")]
-    public class ChunksManagerSettings : ScriptableObject
+    public class ChunksCreatorSettings : ScriptableObject
     {
         [SerializeField] private Chunk chunkPrefab;
         [SerializeField] private int _chunksAmount;
